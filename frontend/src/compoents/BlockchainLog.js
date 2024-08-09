@@ -6,91 +6,93 @@ const BlockchainLog = () => {
     const [web3, setWeb3] = useState(null);
     const [contract, setContract] = useState(null);
 
-    const contractAddress = '0xff71b34D6b03f3e07AACCF8eEDB39f8c3ECa3086';  
-    const abi = [  {
-      "inputs": [
+    const contractAddress = '0xB31CD5f789802f18F3094fDd68203a43a11eA9e3';
+    const abi = [
         {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "logs",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "content",
-          "type": "string"
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "logs",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "content",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "contentType",
+                    "type": "string"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "timestamp",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function",
+            "constant": true
         },
         {
-          "internalType": "string",
-          "name": "contentType",
-          "type": "string"
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "_content",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_contentType",
+                    "type": "string"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "_timestamp",
+                    "type": "uint256"
+                }
+            ],
+            "name": "addLog",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
         },
         {
-          "internalType": "uint256",
-          "name": "timestamp",
-          "type": "uint256"
+            "inputs": [],
+            "name": "getLogs",
+            "outputs": [
+                {
+                    "components": [
+                        {
+                            "internalType": "string",
+                            "name": "content",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "contentType",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "timestamp",
+                            "type": "uint256"
+                        }
+                    ],
+                    "internalType": "struct PhishingLog.LogEntry[]",
+                    "name": "",
+                    "type": "tuple[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function",
+            "constant": true
         }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_content",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_contentType",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_timestamp",
-          "type": "uint256"
-        }
-      ],
-      "name": "addLog",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getLogs",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "string",
-              "name": "content",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "contentType",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "timestamp",
-              "type": "uint256"
-            }
-          ],
-          "internalType": "struct PhishingLog.LogEntry[]",
-          "name": "",
-          "type": "tuple[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    }];  
+    ];
 
     useEffect(() => {
         loadWeb3();
@@ -106,7 +108,12 @@ const BlockchainLog = () => {
     const fetchLogs = async () => {
         if (contract) {
             const logs = await contract.methods.getLogs().call();
-            setLogs(logs);
+            // Convert BigInt to Number for timestamp
+            const formattedLogs = logs.map(log => ({
+                ...log,
+                timestamp: Number(log.timestamp) // Convert BigInt to Number
+            }));
+            setLogs(formattedLogs);
         }
     };
 

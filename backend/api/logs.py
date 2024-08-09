@@ -18,7 +18,7 @@ if not web3.is_connected():
     raise Exception("Failed to connect to Ganache CLI")
 
 # Contract address and ABI
-contract_address = '0xff71b34D6b03f3e07AACCF8eEDB39f8c3ECa3086'
+contract_address = '0xB31CD5f789802f18F3094fDd68203a43a11eA9e3'
 with open('../blockchain/build/contracts/PhishingLog.json') as f:
     abi = json.load(f)['abi']
 

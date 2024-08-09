@@ -14,14 +14,13 @@ const LogList = () => {
         <div className="log-list">
             {logs.length > 0 ? (
                 <ul>
-                    {logs.map((log, index) => (
+                    {/* {logs.map((log, index) => (
                         <li key={index}>
-                            <strong>Type:</strong> {log.type} <br />
+                            <strong>Type:</strong> {log.contentType} <br />
                             <strong>Content:</strong> {log.content} <br />
-                            <strong>Timestamp:</strong> {log.timestamp} <br />
-                            <strong>Status:</strong> {log.is_phishing ? "Phishing" : "Safe"}
+                            <strong>Timestamp:</strong> {new Date(Number(log.timestamp) * 1000).toLocaleString()} <br />
                         </li>
-                    ))}
+                    ))} */}
                 </ul>
             ) : (
                 <p>No logs available.</p>
