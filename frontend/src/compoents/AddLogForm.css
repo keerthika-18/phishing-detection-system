@@ -1,0 +1,66 @@
+
+.add-log-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.add-log-form h2 {
+    text-align: center;
+    color: #6a0dad;
+    margin-bottom: 20px;
+}
+
+
+.add-log-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.add-log-form input[type="text"],
+.add-log-form input[type="email"],
+.add-log-form input[type="datetime-local"],
+.add-log-form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+
+.add-log-form button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #6a0dad;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.add-log-form button:disabled {
+    background-color: #a19ccf; 
+    cursor: not-allowed;
+}
+
+/* Status message styling */
+.add-log-form .status-message {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+.add-log-form .prediction {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #6a0dad; /* Purple color */
+}

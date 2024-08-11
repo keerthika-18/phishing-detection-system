@@ -1,52 +1,52 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './AddLogForm.css';
 
 const AddLogForm = () => {
-    const [type, setType] = useState('type'); // Default type
+    const [type, setType] = useState('phishing_url');
     const [content, setContent] = useState('');
     const [timestamp, setTimestamp] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
     const [prediction, setPrediction] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-    
-        // Basic validation
+
         if (!content || !timestamp) {
             setStatusMessage('Content and Timestamp are required.');
             return;
         }
-    
+
         const newLog = {
             contentType: type,
             content,
-            timestamp: new Date(timestamp).toISOString() // Convert timestamp to ISO 8601 format
+            timestamp: new Date(timestamp).toISOString()
         };
-    
+
         try {
-            // Declare response and await the axios call
+            setIsLoading(true);
             const response = await axios.post('http://127.0.0.1:5000/api/logs', newLog);
-            console.log('Full Response:', response.data); 
-            console.log('Log added:', response.data);
-            setType('phishing_url'); // Reset to default
-            setContent('');
-            setTimestamp('');
+            console.log('Full Response:', response.data);
+
+            // Assuming the API returns `is_phishing` as either 1 or 0
+            const isPhishing = response.data.is_phishing === 1 ? 'not safe' : 'safe';
+            
+            // Determine content type for prediction
+            const contentTypeLabel = type === 'phishing_email' ? 'email' : 'URL';
+            
             setStatusMessage('Log added successfully.');
-    
-            // Ensure correct handling of the prediction result
-            const isPhishing = parseInt(response.data.is_phishing) === 1 ? 'not safe' : 'safe';
-            console.log(isPhishing);
-            setPrediction(`The ${type === 'phishing_email' ? 'email' : 'URL'} is ${isPhishing}.`);
+            setPrediction(`The ${contentTypeLabel} is ${isPhishing}.`);
         } catch (error) {
             console.error('There was an error adding the log!', error);
             setStatusMessage('There was an error adding the log.');
             setPrediction('');
+        } finally {
+            setIsLoading(false);
         }
-        // const isPhishing = parseInt(response.data.is_phishing) === 1 ? 'not safe' : 'safe';   
-       
+        
     };
 
-  
     return (
         <div className="add-log-form">
             <h2>Add New Log</h2>
@@ -84,9 +84,11 @@ const AddLogForm = () => {
                     />
                 </label>
                 <br />
-                <button type="submit">Add Log</button>
+                <button type="submit" disabled={isLoading}>
+                    {isLoading ? 'Submitting...' : 'Add Log'}
+                </button>
                 {statusMessage && <p className="status-message">{statusMessage}</p>}
-                {prediction && <p className="prediction">{prediction}</p>} {/* Display the prediction result */}
+                {prediction && <p className="prediction">{prediction}</p>}
             </form>
         </div>
     );

@@ -28,7 +28,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -81,7 +82,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_content\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_contentType\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"_timestamp\",\"type\":\"uint256\"}],\"name\":\"addLog\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLogs\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"content\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"contentType\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"internalType\":\"struct PhishingLog.LogEntry[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"logs\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"content\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"contentType\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/PhishingLog.sol\":\"PhishingLog\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/PhishingLog.sol\":{\"keccak256\":\"0x40af24b8421d23e326caec7e70bbf5d4bcb2311cdce9d55498145620e31e5308\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7ccd2f1c9aab8abdafc0a1fa3d5e0d2cbd41730ee3d0a9fb80d3420878ba09f2\",\"dweb:/ipfs/Qmd7TT69jKkXS8NMnEigAvrfQ1v2Px8WttDq65L53F1K79\"]}},\"version\":1}",
@@ -5753,8 +5755,8 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x82b5BA799279360Ae67f803D2Bcc834d58aFf25b",
-      "transactionHash": "0x0833e47150cbb32b75b1fc49d85bb525fbae7fa17940a18cc72864187c66d287"
+      "address": "0xdD000A4aAB57d172F26f0eB82Dd2b52CBdD1baC8",
+      "transactionHash": "0xe5e84aeba8fd9830a2dd3ac4b4dd9eb3e62b41ffc22db51ff11884440aa7e3f9"
     },
     "1722988031996": {
       "events": {},
@@ -5776,7 +5778,8 @@
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-08-09T15:20:43.385Z",
+  "updatedAt": "2024-08-10T09:21:15.246Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

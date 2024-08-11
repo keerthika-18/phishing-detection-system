@@ -3,23 +3,34 @@ import axios from 'axios';
 
 const LogList = () => {
     const [logs, setLogs] = useState([]);
+    const [error, setError] = useState('');
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:5000/api/logs')
-            .then(response => setLogs(response.data))
-            .catch(error => console.error('Error fetching logs:', error));
+        const fetchLogs = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:5000/api/logs');
+                console.log('Logs fetched:', response.data); // Debug log
+                setLogs(response.data);
+            } catch (error) {
+                console.error('Error fetching logs:', error);
+                setError('Failed to fetch logs');
+            }
+        };
+
+        fetchLogs();
     }, []);
 
     return (
         <div className="log-list">
+            {error && <p>{error}</p>}
             {logs.length > 0 ? (
                 <ul>
                     {/* {logs.map((log, index) => (
-                        <li key={index}>
-                            <strong>Type:</strong> {log.contentType} <br />
-                            <strong>Content:</strong> {log.content} <br />
-                            <strong>Timestamp:</strong> {new Date(Number(log.timestamp) * 1000).toLocaleString()} <br />
-                        </li>
+                        // <li key={index}>
+                        //     <strong>Content:</strong> {log.content} <br />
+                        //     <strong>Content Type:</strong> {log.contentType} <br />
+                        //     <strong>Timestamp:</strong> {new Date(log.timestamp * 1000).toLocaleString()} <br />
+                        // </li>
                     ))} */}
                 </ul>
             ) : (

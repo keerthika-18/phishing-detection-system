@@ -6,7 +6,7 @@ const BlockchainLog = () => {
     const [web3, setWeb3] = useState(null);
     const [contract, setContract] = useState(null);
 
-    const contractAddress = '0xB31CD5f789802f18F3094fDd68203a43a11eA9e3';
+    const contractAddress = '0xdD000A4aAB57d172F26f0eB82Dd2b52CBdD1baC8';
     const abi = [
         {
             "inputs": [

@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import joblib
 import pandas as pd
 from web3 import Web3
-from pymongo import MongoClient
+# from pymongo import MongoClient
 import json
 from datetime import datetime
 from api.logs import logs_bp
@@ -11,23 +11,22 @@ import re
 app = Flask(__name__)
 app.register_blueprint(logs_bp)
 CORS(app)
-# Load the model
-model = joblib.load('..models/phishing_model.pkl')
 
-# Set up Web3 connection
-w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))  # Update with your provider URL
-contract_address = '0xB31CD5f789802f18F3094fDd68203a43a11eA9e3'  # Replace with your deployed contract address
+model = joblib.load('models/phishing_model_best.pkl')
+
+w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
+contract_address = '0xdD000A4aAB57d172F26f0eB82Dd2b52CBdD1baC8' 
 with open('../blockchain/build/contracts/PhishingLog.json') as f:
     abi = json.load(f)['abi']
 
 contract = w3.eth.contract(address=contract_address, abi=abi)
 
-# Set up MongoDB connection
-mongo_client = MongoClient('mongodb://localhost:27017/')
-db = mongo_client['phishing_detection']  # Database name
-logs_collection = db['logs']  # Collection name
 
-# Ensure default account is set
+# mongo_client = MongoClient('mongodb://localhost:27017/')
+# db = mongo_client['phishing_detection']  
+# logs_collection = db['logs']  
+
+
 if not w3.eth.default_account:
     w3.eth.default_account = w3.eth.accounts[0]
 
@@ -35,7 +34,7 @@ def extract_features(df, type_):
     features = pd.DataFrame()
     if type_ == 'email':
         features['length'] = df['email_text'].apply(len)
-        # Add other email-related features if used in training
+      
     elif type_ == 'url':
         features['length'] = df['url'].apply(len)
         features['num_dots'] = df['url'].apply(lambda x: x.count('.'))
@@ -56,26 +55,20 @@ def add_log():
 
     try:
         timestamp = int(datetime.fromisoformat(timestamp_str).timestamp())
+        print("Parsed timestamp:", timestamp)
     except ValueError:
         return jsonify({"error": "Invalid timestamp format"}), 400
 
     try:
         df = pd.DataFrame([{'email_text': content}] if content_type == 'phishing_email' else [{'url': content}])
         features = extract_features(df, 'email' if content_type == 'phishing_email' else 'url')
-        print("Features:", features)  # Debugging output
+        print("Extracted features:", features)
         prediction = model.predict(features)
-        print("Prediction:", prediction)  # Debugging output
+        print("Prediction:", prediction)
         is_phishing = prediction[0] == 1
     except Exception as e:
+        print("Prediction error:", e)
         return jsonify({"error": f"Prediction error: {str(e)}"}), 500
-
-    log_entry = {
-        'type': content_type,
-        'content': content,
-        'timestamp': datetime.fromtimestamp(timestamp),
-        'is_phishing': is_phishing
-    }
-    logs_collection.insert_one(log_entry)
 
     try:
         tx_hash = contract.functions.addLog(content, content_type, timestamp).transact({
@@ -94,8 +87,5 @@ def add_log():
             "transaction_receipt": receipt_dict
         })
     except Exception as e:
+        print("Blockchain interaction error:", e)
         return jsonify({"error": f"Blockchain interaction error: {str(e)}"}), 500
-
-
-if __name__ == '__main__':
-    app.run(debug=True)

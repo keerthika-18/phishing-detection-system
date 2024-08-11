@@ -1,0 +1,66 @@
+/* home.css */
+h1{
+    text-align: center;
+}
+.home-page {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.home-page h1 {
+    text-align: center;
+    color: #6a1b9a;
+    margin-bottom: 20px;
+}
+
+.add-log-form,
+.log-list,
+.blockchain-log {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.add-log-form h2 {
+    color: #6a1b9a; 
+    margin-bottom: 15px;
+}
+
+.status-message,
+.prediction {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.log-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.log-list li {
+    background: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.log-list strong {
+    color: #6a1b9a;
+}
+
+.blockchain-log {
+    background: #e1bee7;
+    color: #333;
+}
+
+.blockchain-log h3 {
+    color: #6a1b9a; 
+}

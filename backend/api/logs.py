@@ -13,18 +13,13 @@ logger = logging.getLogger(__name__)
 # Connect to Ganache CLI
 web3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
 
-# Check connection
-if not web3.is_connected():
-    raise Exception("Failed to connect to Ganache CLI")
-
 # Contract address and ABI
-contract_address = '0xB31CD5f789802f18F3094fDd68203a43a11eA9e3'
+contract_address = '0xdD000A4aAB57d172F26f0eB82Dd2b52CBdD1baC8'
 with open('../blockchain/build/contracts/PhishingLog.json') as f:
     abi = json.load(f)['abi']
 
 # Create contract instance
 contract = web3.eth.contract(address=contract_address, abi=abi)
-
 # Get the default account from Ganache
 default_account = web3.eth.accounts[0]
 
@@ -32,7 +27,10 @@ default_account = web3.eth.accounts[0]
 def get_logs():
     try:
         logs = contract.functions.getLogs().call()
-        return jsonify(logs)
+        # Ensure the logs are in a serializable format
+        formatted_logs = [{'content': log[0], 'contentType': log[1], 'timestamp': log[2]} for log in logs]
+        logger.info(f"Logs fetched successfully: {formatted_logs}")
+        return jsonify(formatted_logs)
     except Exception as e:
         logger.error(f"Error fetching logs: {str(e)}")
         return jsonify({"error": str(e)}), 500
@@ -42,13 +40,10 @@ def add_log():
     data = request.json
     if data:
         try:
-            # Convert ISO 8601 timestamp to UNIX timestamp
-            timestamp_str = data['timestamp']
+            timestamp_str = data.get('timestamp')
             timestamp = int(datetime.fromisoformat(timestamp_str).timestamp())
-
             tx_hash = contract.functions.addLog(data['content'], data['contentType'], timestamp).transact({'from': default_account})
             receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
-
             # Convert the receipt to a JSON-serializable format
             receipt_dict = {
                 'transactionHash': receipt['transactionHash'].hex(),
@@ -63,7 +58,6 @@ def add_log():
                 'to': receipt['to'],
                 'transactionIndex': receipt['transactionIndex']
             }
-
             logger.info(f"Transaction successful: {receipt_dict['transactionHash']}")
             return jsonify(receipt_dict), 201
         except Exception as e:
